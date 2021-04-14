@@ -1,0 +1,160 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass[11pt]{article}
+
+% Remove the "review" option to generate the final version.
+\usepackage[review]{emnlp2021}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+\input{paper_library.tex}
+
+\usepackage{amsmath, amsfonts}
+\usepackage{xcolor}
+\newcommand\todo[1]{\textcolor{red}{#1}}
+\newcommand{\ie}{i.e.,\xspace}
+\usepackage{graphicx}
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+\title{Learning Compositional Forms for Grounded Instructions}
+
+% Author information can be set in various styles:
+% For several authors from the same institution:
+% \author{Author 1 \and ... \and Author n \\
+%         Address line \\ ... \\ Address line}
+% if the names do not fit well on one line use
+%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
+% For authors from different institutions:
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \And  ... \And
+%         Author n \\ Address line \\ ... \\ Address line}
+% To start a seperate ``row'' of authors use \AND, as in
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \AND
+%         Author 2 \\ Address line \\ ... \\ Address line \And
+%         Author 3 \\ Address line \\ ... \\ Address line}
+
+\author{First Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  \texttt{email@domain} \\\And
+  Second Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  \texttt{email@domain} \\}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We leverage advances in pre-trained language models to make advances in planning conditioned on language.
+\end{abstract}
+
+\section{Pre-training to improve grounding}
+\todo{incomplete}
+%
+Inspired by \cite{Lu2019ViLBERTPT} we devise a pre-training task that encourages our model to attend to the instruction and the environment jointly. 
+%
+At pre-training, the model receives the command and a representation of the initial environment. 
+%
+The model predicts whether a given command is relevant to the environment.
+%
+These embeddings will be used downstream by a planner (Section \ref{transformer-planner}) that will be trained to execute natural language structurions.
+%
+The hope is that these ``grounded'' embeddings will give our planner a head start in learning how the meaning of words can be composed.
+%
+One imagines that such a joint embedding will be helpful since knowing how to pick out the ``red'' items and the ``square''  items on a grid will be useful in picking out the ``red squares'', even if the phrase has never been seen before.
+
+We will use the grounded-SCAN dataset \cite{ruis2020benchmark} which contains synthetic sentences paired with demonstrations in a grid world.
+%
+The sentences in the dataset are split so as to test the ability of a model to perform zero-shot generalization.
+%
+For example, the phrases ``red'', ``blue'', and ``blue square'' all appear in the training data, but the phrase ``red square'' appears only at test-time.
+
+\section{Naturalistic data}
+\todo{incomplete}
+%
+The data from \citet{ruis2020benchmark} consists of synthetic sentences paired with demonstrations of the sentences being acted out in a grid world.
+%
+In order to test whether our model is capable of handling naturalistic language, we collected human-generated annotations via Amazon Mechanical Turk.
+%
+Workers were shown the demonstration video and asked to write the sentence that might have produced the actions shown.
+%
+In order to push volunteers towards the desired content, we will specify a few dimensions that should be used in the description.
+%
+In order to preserve the compositional split, we also specified, per example, which properties of an object should not be mentioned.
+%
+Note that these sentences are to be used at test-time only.
+%
+Our experiment is to measure the performance of a model, trained on synthetic data, on naturalistic test data.
+%
+We hope to determine whether the performance of our model is due mostly to the synthetic nature of the data, or if our model is truly capable of handling compositionality, as it is exhibited in human-generated language. 
+
+\section{Multi-modal transformer baseline}
+\todo{incomplete}
+%
+\label{transformer-planner}
+\todo{incomplete}
+We present our own simple planner to see if we can improve on the baseline given in \cite{ruis2020benchmark}.
+
+\section{Related Work}
+\todo{incomplete}
+%
+\subsection{Learning from Execution}
+The most relevant existing work to our LTL semantic parser is \cite{roma2019}.
+%
+They also train a weakly-supervised neural semantic parser for LTL.
+%
+But, their reward scheme relies on the deterministic ``advancing'' of an LTL formula along a ground truth track.
+%
+In our approach, the feedback comes from an executor which is itself a neural model.
+%
+Our parser must overcome noise in the reward which arises from the executor's own imperfect planning.
+
+\subsection{Visual Language Navigation}
+The most relevant existing work to our pre-trained embeddings project is \cite{Hao2020TowardsLA}.
+%
+They also pre-train to create embeddings for use in downstream Visual-Language-Navigation tasks.
+%
+But, their pre-training scheme relies on predicting an action for a given environment and instruction.
+%
+Our approach only relies on aligning commands to environments in which they are relevant, which is much less laborious to annotate.
+
+\subsection{Pre-trained language models}
+
+
+% Entries for the entire Anthology, followed by custom entries
+\bibliography{anthology,custom}
+\bibliographystyle{acl_natbib}
+
+\appendix
+
+\section{Example Appendix}
+\label{sec:appendix}
+
+This is an appendix.
+
+\end{document}
