@@ -26,11 +26,6 @@
 \usepackage{microtype}
 \input{paper_library.tex}
 
-\usepackage{amsmath, amsfonts}
-\usepackage{xcolor}
-\newcommand\todo[1]{\textcolor{red}{#1}}
-\newcommand{\ie}{i.e.,\xspace}
-\usepackage{graphicx}
 
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
@@ -73,9 +68,9 @@
 We leverage advances in pre-trained language models to make advances in planning conditioned on language.
 \end{abstract}
 
+\section{Introduction}
+
 \section{Pre-training to improve grounding}
-\todo{incomplete}
-%
 Inspired by \cite{Lu2019ViLBERTPT} we devise a pre-training task that encourages our model to attend to the instruction and the environment jointly. 
 %
 At pre-training, the model receives the command and a representation of the initial environment. 
@@ -95,8 +90,7 @@ The sentences in the dataset are split so as to test the ability of a model to p
 For example, the phrases ``red'', ``blue'', and ``blue square'' all appear in the training data, but the phrase ``red square'' appears only at test-time.
 
 \section{Naturalistic data}
-\todo{incomplete}
-%
+
 The data from \citet{ruis2020benchmark} consists of synthetic sentences paired with demonstrations of the sentences being acted out in a grid world.
 %
 In order to test whether our model is capable of handling naturalistic language, we collected human-generated annotations via Amazon Mechanical Turk.
@@ -114,25 +108,21 @@ Our experiment is to measure the performance of a model, trained on synthetic da
 We hope to determine whether the performance of our model is due mostly to the synthetic nature of the data, or if our model is truly capable of handling compositionality, as it is exhibited in human-generated language. 
 
 \section{Multi-modal transformer baseline}
-\todo{incomplete}
-%
 \label{transformer-planner}
 \todo{incomplete}
 We present our own simple planner to see if we can improve on the baseline given in \cite{ruis2020benchmark}.
 
 \section{Related Work}
-\todo{incomplete}
-%
 \subsection{Learning from Execution}
-The most relevant existing work to our LTL semantic parser is \cite{roma2019}.
-%
-They also train a weakly-supervised neural semantic parser for LTL.
-%
-But, their reward scheme relies on the deterministic ``advancing'' of an LTL formula along a ground truth track.
-%
-In our approach, the feedback comes from an executor which is itself a neural model.
-%
-Our parser must overcome noise in the reward which arises from the executor's own imperfect planning.
+% The most relevant existing work to our LTL semantic parser is \cite{roma2019}.
+% %
+% They also train a weakly-supervised neural semantic parser for LTL.
+% %
+% But, their reward scheme relies on the deterministic ``advancing'' of an LTL formula along a ground truth track.
+% %
+% In our approach, the feedback comes from an executor which is itself a neural model.
+% %
+% Our parser must overcome noise in the reward which arises from the executor's own imperfect planning.
 
 \subsection{Visual Language Navigation}
 The most relevant existing work to our pre-trained embeddings project is \cite{Hao2020TowardsLA}.
@@ -144,6 +134,24 @@ But, their pre-training scheme relies on predicting an action for a given enviro
 Our approach only relies on aligning commands to environments in which they are relevant, which is much less laborious to annotate.
 
 \subsection{Pre-trained language models}
+
+
+\section{Data}
+Our model is trained on the grounded SCAN benchmark \citep{ruis2020benchmark}, a dataset of synthetic sentences in English paired with demonstrations in a grid world that systematically tests generalizations.
+%
+We collect a new dataset, grounded SCAN Human (\TODO name), which augments the demonstrations with human generated sentences.
+%
+
+
+\section{Model Architecture}
+
+\section{Multi-modal transformer baseline}
+We present our own simple planner to see if we can improve on the baseline given in \cite{ruis2020benchmark}.
+
+\subsection{Results}
+
+\subsection{Discussion}
+
 
 
 % Entries for the entire Anthology, followed by custom entries
