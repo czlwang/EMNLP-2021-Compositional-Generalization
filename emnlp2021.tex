@@ -159,7 +159,12 @@ Instead, what if we focused on our architecture and our investigation into compo
 \subsection{Transformers for Vision}
 Our model takes both language and visual features as input, and thus builds on the work of \citep{LuViLBERT2019, tan-bansal-2019-lxmert, LiVisualBert2019}.
 
-
+\subsection{Compositional Generalization}
+The paper \citep{ruis2020benchmark} that introduced gSCAN also presented a simple baseline model.
+%
+Since then, numerous improvements on that model have been made \citep{gao-etal-2020-systematic, heinze-think-2020, kuo2020compositional}.
+%
+However, none of these improvements make use of recent advances in pre-trained language models. 
 
 \section{Data}
 Our model is trained on the grounded SCAN benchmark \citep{ruis2020benchmark}, a dataset of synthetic sentences in English paired with demonstrations in a grid world that systematically tests generalizations.
@@ -169,9 +174,9 @@ We collect a new dataset, grounded SCAN Human (\TODO name), which augments the d
 
 
 \section{Model Architecture}
-
-\section{Multi-modal transformer baseline}
 We present our own simple planner to see if we can improve on the baseline given in \cite{ruis2020benchmark}.
+
+\section{RNN baseline}
 
 \subsection{Results}
 
