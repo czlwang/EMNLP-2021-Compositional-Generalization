@@ -125,15 +125,40 @@ We present our own simple planner to see if we can improve on the baseline given
 % Our parser must overcome noise in the reward which arises from the executor's own imperfect planning.
 
 \subsection{Visual Language Navigation}
-The most relevant existing work to our pre-trained embeddings project is \cite{Hao2020TowardsLA}.
+Our setting is very similar to the problem of Visual-Language-Navigation (VLN). 
 %
-They also pre-train to create embeddings for use in downstream Visual-Language-Navigation tasks.
+In a VLN task, a robotic agent is given natural language directions to a specified goal location. 
+%
+The agent must navigate the environment until it reaches the goal.
+%
+With the advent of Transformers, many approaches have sought to build models for Visual-Language-Navigation \citep{magassouba2021crossmap, fang2019scene, Chen2020TopologicalPW}.
+%
+The problem that we focus on in this work is strictly more challenging than the VLN task. 
+%
+Not only must our agent learn to navigate, it must also learn to interact with the objects in the environment according to their attributes.
+
+%
+Our work is most related to the approach of \citet{Hao2020TowardsLA}, who present pre-training scheme to create embeddings for use in downstream Visual-Language-Navigation tasks.
 %
 But, their pre-training scheme relies on predicting an action for a given environment and instruction.
 %
 Our approach only relies on aligning commands to environments in which they are relevant, which is much less laborious to annotate.
+%
 
-\subsection{Pre-trained language models}
+{\color{red}czw re the above: gSCAN is a dataset of commands and environments where execution is possible. Room-to-Room is a dataset of commands and executions. 
+%
+Can we say that creating a dataset like Room-to-Room is really that much more laborious? 
+%
+Moreover, in practice, gSCAN actually collects the executions for each command as well. 
+%
+And can we really say that laborious annotation is a downside of \citet{Hao2020TowardsLA} given that datasets like Room-to-Room and others already exist?
+%
+Instead, what if we focused on our architecture and our investigation into composition?}
+%
+
+\subsection{Transformers for Vision}
+Our model takes both language and visual features as input, and thus builds on the work of \citep{LuViLBERT2019, tan-bansal-2019-lxmert, LiVisualBert2019}.
+
 
 
 \section{Data}
