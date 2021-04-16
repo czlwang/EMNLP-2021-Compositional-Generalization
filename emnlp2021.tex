@@ -197,6 +197,9 @@ We run two experiments.
 %
 In the first experiment, we first pre-trained our text and vision encoder using grounded masked language modeling. 
 %
+In the second experiment, we instead use randomly initialized weights for our text and vision encoder.
+
+%
 At inference time, the model receives the text and vision encoder create text embeddings, $[h_{[CLS]}^{l},...,h_{n}^{l}]$, for the input command and vision embeddings, $[h_{[CLS]}^{v},...,h_{m}^{v}]$ for the patches for the initial grid.
 %
 At each time-step $t$, the RNN receives these embeddings, as well as the image features of the environment at that time-step $e_t$.
@@ -213,11 +216,13 @@ The hidden state at time $t$, $h_t$ is fed through a fully-connected layer, and 
 $$
 p(a_{t+1} \mid a_{0:t}, e_{0:t}, x) = \text{Softmax}(FC(h_{t+1}))
 $$
+%
+
 \Cref{tab:baseline_results} shows the performance of our baseline.
 
 \begin{table}
 \begin{center}
-\begin{tabularx}{\columnwidth}{ l|cccc| }
+\begin{tabularx}{\columnwidth}{ l|cccc }
 \toprule
 \multicolumn{1}{c}{} 
 & \multicolumn{2}{c}{w/ pre-training}  
