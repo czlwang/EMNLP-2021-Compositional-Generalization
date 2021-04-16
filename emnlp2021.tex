@@ -26,6 +26,8 @@
 \usepackage{microtype}
 \input{paper_library.tex}
 
+\usepackage{cleveref}
+\usepackage{tabularx, booktabs}
 
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
@@ -134,17 +136,6 @@ But, their pre-training scheme relies on predicting an action for a given enviro
 Our approach only relies on aligning commands to environments in which they are relevant, which is much less laborious to annotate.
 %
 
-{\color{red}czw re the above: gSCAN is a dataset of commands and environments where execution is possible. Room-to-Room is a dataset of commands and executions. 
-%
-Can we say that creating a dataset like Room-to-Room is really that much more laborious? 
-%
-Moreover, in practice, gSCAN actually collects the executions for each command as well. 
-%
-And can we really say that laborious annotation is a downside of \citet{Hao2020TowardsLA} given that datasets like Room-to-Room and others already exist?
-%
-Instead, what if we focused on our architecture and our investigation into composition?}
-%
-
 \subsection{Transformers for Vision}
 Our model takes both language and visual features as input, and thus builds on the work of \citep{LuViLBERT2019, tan-bansal-2019-lxmert, LiVisualBert2019}.
 
@@ -163,9 +154,87 @@ We collect a new dataset, grounded SCAN Human (\TODO name), which augments the d
 
 
 \section{Model Architecture}
-We present our own simple planner to see if we can improve on the baseline given in \cite{ruis2020benchmark}.
+The training data $D=\{(\mathbf{x}_i, E_i) \}_{i=1}^{i=|D|}$ consists of natural language commands $\mathbf{x}$ paired with an execution $E$. 
+%
+Each execution $E$ is a tuple of a sequence, $\mathbf{a}$, with $T$ actions and a sequence, $\mathbf{e}$, with $T+1$ environments, where action $\mathbf{a}_t$ results in state  $\mathbf{e}_{t+1}$. 
+%
+Each environment is represented by $m$ image patches: $\mathbf{e}_{t} = [e_{t,0}\cdots e_{t,m}]$.
+%
+
+\Cref{fig:training_model} shows our model as it makes a forward pass during training.
+%
+Consider an input command $\mathbf{x}_{i}$ of length $n$.
+%
+At each time-step $t$, the model receives patches $\mathbf{e}_t$ which represent the environment as it appears in that moment. 
+%
+The command and patches are embedded using a text and vision embedding layer, respectively. 
+%
+The embeddings are passed to stacked co-transformer and transformer layers, which alternately attend to one and both input modalities.
+%
+The topmost of the stacked transformers outputs a representation of the text as a sequence of $n$ hidden states, $[h_{[CLS]}^l,\cdots,h_{n}^l]$, and a representation of the image patches as $m$ hidden states $[h^e_{[CLS]}, \cdots, h^{e}_{m}]$.
+%
+A context vector $c_t$ is formed by concatenating $h_{[CLS]}^l$ and $h_{[CLS]}^e$.
+%
+This context vector is concatenated with the action taken at time $t$, $\mathbf{a}_t$.
+%
+The context vectors for all time-steps are concatenated with the actions for those time-steps to form a sequence $[\mathbf{a}_0\oplus \mathbf{c}_0, ..., \mathbf{a}_t \oplus \mathbf{c}_t]$.
+%
+This sequence is fed to a Transformer, which predicts $a_{t+1}$.
+%
+Decoding precedes auto-regressively.
+
+\begin{figure}
+\includegraphics[width=3in]{training_model.png}
+\caption{Predicting an action at time $t$. Our model consists of a text encoder (blue), a vision encoder (red), and an action decoder (orange). }
+\label{fig:training_model}	
+\end{figure}
 
 \section{RNN baseline}
+We compare our model with an RNN decoder to show the effectiveness (1) of our pre-training scheme and (2) of our Transformer-based action decoder.
+%
+
+We run two experiments.
+%
+In the first experiment, we first pre-trained our text and vision encoder using grounded masked language modeling. 
+%
+At inference time, the model receives the text and vision encoder create text embeddings, $[h_{[CLS]}^{l},...,h_{n}^{l}]$, for the input command and vision embeddings, $[h_{[CLS]}^{v},...,h_{m}^{v}]$ for the patches for the initial grid.
+%
+At each time-step $t$, the RNN receives these embeddings, as well as the image features of the environment at that time-step $e_t$.
+%
+A context vector $c_t$ is created by applying attention to the input embeddings, using the current features $e_t$ as the query vector:
+$$
+c_t = \text{Attn}(e_t, [h_{[CLS]}^{l},...,h_{n}^{l}; h_{[CLS]}^{v},...,h_{m}^{v}] )
+$$
+Given this context vector and the previous hidden state $h_{t}$ as input, the RNN produces a new hidden state $h_{t+1}$:
+$$
+h_{t+1} = RNN(h_t, c_t)
+$$
+The hidden state at time $t$, $h_t$ is fed through a fully-connected layer, and a softmax is used to produce a distribution over actions, from which the action $a_t$ is sampled:
+$$
+p(a_{t+1} \mid a_{0:t}, e_{0:t}, x) = \text{Softmax}(FC(h_{t+1}))
+$$
+\Cref{tab:baseline_results} shows the performance of our baseline.
+
+\begin{table}
+\begin{center}
+\begin{tabularx}{\columnwidth}{ l|cccc| }
+\toprule
+\multicolumn{1}{c}{} 
+& \multicolumn{2}{c}{w/ pre-training}  
+& \multicolumn{2}{c}{random}\\
+\midrule
+A: Random & --  & --  & -- &  -- \\
+B: Yellow Squares & --  & --  & -- &  -- \\
+C: Red Squares & --  & --  & -- &  -- \\
+D: Novel Direction & --  & --  & -- &  -- \\
+E: Relativity & --  & --  & -- &  -- \\
+F: Class Inference & --  & --  & -- &  -- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\caption{The performance of an RNN decoder using our pre-trained text-environment embeddings vs. using randomly initialized embeddings.}
+\label{tab:baseline_results}
+\end{table}
 
 \subsection{Results}
 
