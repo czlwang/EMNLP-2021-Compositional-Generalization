@@ -220,26 +220,28 @@ $$
 
 \Cref{tab:baseline_results} shows the performance of our baseline.
 
-\begin{table}
+\begin{table*}
 \begin{center}
-\begin{tabularx}{\columnwidth}{ l|cccc }
+\begin{tabularx}{\textwidth}{ l|ccccc }
 \toprule
 \multicolumn{1}{c}{} 
 & \multicolumn{2}{c}{w/ pre-training}  
-& \multicolumn{2}{c}{random}\\
+& \multicolumn{2}{c}{random}
+& \multicolumn{1}{c}{\cite{ruis2020benchmark}}\\
+A: Random & test  & val  & test &  val & test \\
 \midrule
-A: Random & --  & --  & -- &  -- \\
-B: Yellow Squares & --  & --  & -- &  -- \\
-C: Red Squares & --  & --  & -- &  -- \\
-D: Novel Direction & --  & --  & -- &  -- \\
-E: Relativity & --  & --  & -- &  -- \\
-F: Class Inference & --  & --  & -- &  -- \\
+A: Random & --  & --  & -- &  -- & 97.69 $\pm$ 0.22\\
+B: Yellow Squares & --  & --  & -- &  -- & 54.96 $\pm$ 39.39\\
+C: Red Squares & --  & --  & -- &  -- & 23.51 $\pm$ 21.82\\
+D: Novel Direction & --  & --  & -- &  & 0.00 $\pm$ 0.00 \\
+E: Relativity & --  & --  & -- & & 35.02 $\pm$ 2.35 \\
+F: Class Inference & --  & --  & -- &  -- & 92.52 $\pm$ 6.75 \\
 \bottomrule
 \end{tabularx}
 \end{center}
 \caption{The performance of an RNN decoder using our pre-trained text-environment embeddings vs. using randomly initialized embeddings.}
 \label{tab:baseline_results}
-\end{table}
+\end{table*}
 
 \subsection{Results}
 
