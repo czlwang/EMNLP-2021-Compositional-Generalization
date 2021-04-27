@@ -90,6 +90,20 @@ The sentences in the dataset are split so as to test the ability of a model to p
 For example, the phrases ``red'', ``blue'', and ``blue square'' all appear in the training data, but the phrase ``red square'' appears only at test-time.
 
 \section{Pre-training to improve grounding}
+\begin{figure}
+	\includegraphics[width=3in]{pre_training_model.png}
+	\caption{Two of our pre-training tasks. 
+	%
+	In Grounded Masked Language Modeling (top), the model receives the initial environment and the partially-masked command as input.
+	%
+	It must predict the masked portions of the input command.
+	%
+	In Frame Entailment Classification, the model receives the input command as well as visual representations from two frames of video data. 
+	%
+	It must classify the frames as being entailed by the command or not.
+}
+	\label{fig:pre_training}	
+\end{figure}
 
 \subsection*{Multi-modal Entailment Prediction}
 \todo{incomplete}
