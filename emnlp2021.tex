@@ -175,7 +175,7 @@ Our model is trained on the grounded SCAN benchmark \citep{ruis2020benchmark}, a
 %
 We collect a new dataset, grounded SCAN Human (\TODO name), which augments the demonstrations with human generated sentences.
 %
-
+(\TODO data splits)
 
 \section{Model Architecture}
 The training data $D=\{(\mathbf{x}_i, E_i) \}_{i=1}^{i=|D|}$ consists of natural language commands $\mathbf{x}$ paired with an execution $E$. 
@@ -253,30 +253,97 @@ p(a_{t+1} \mid a_{0:t}, e_{0:t}, x) = \text{Softmax}(FC(h_{t+1}))
 $$
 %
 
-\Cref{tab:baseline_results} shows the performance of our baseline.
+\Cref{tab:gscan_results} shows the performance of our baseline.
 
 \begin{table*}
 \begin{center}
-\begin{tabularx}{\textwidth}{ l|ccccc }
+\begin{tabularx}{\textwidth}{ l|ccccccccc }
 \toprule
+\multicolumn{1}{c}{} 
+& \multicolumn{4}{c}{Transformer}  
+& \multicolumn{4}{c}{RNN}  
+& \\
+\cmidrule{3-4}
+\cmidrule{7-8}
 \multicolumn{1}{c}{} 
 & \multicolumn{2}{c}{w/ pre-training}  
 & \multicolumn{2}{c}{random}
+& \multicolumn{2}{c}{w/ pre-training}  
+& \multicolumn{2}{c}{random}
 & \multicolumn{1}{c}{\cite{ruis2020benchmark}}\\
-A: Random & test  & val  & test &  val & test \\
+& test  & val  & test &  val & test &  val & test & val & test  \\
 \midrule
-A: Random & --  & --  & -- &  -- & 97.69 $\pm$ 0.22\\
-B: Yellow Squares & --  & --  & -- &  -- & 54.96 $\pm$ 39.39\\
-C: Red Squares & --  & --  & -- &  -- & 23.51 $\pm$ 21.82\\
-D: Novel Direction & --  & --  & -- &  & 0.00 $\pm$ 0.00 \\
-E: Relativity & --  & --  & -- & & 35.02 $\pm$ 2.35 \\
-F: Class Inference & --  & --  & -- &  -- & 92.52 $\pm$ 6.75 \\
+A: Random & --  & --  & -- &  -- & -- &  -- & -- &  -- & 97.69 $\pm$ 0.22\\
+B: Yellow Squares & --  & --  & -- &  -- & -- &  -- & -- &  -- &  54.96 $\pm$ 39.39\\
+C: Red Squares & --  & --  & -- &  -- & -- &  -- & -- &  -- & 23.51 $\pm$ 21.82\\
+D: Novel Direction & --  & --  & -- & -- & -- &  -- & -- &  -- & 0.00 $\pm$ 0.00 \\
+E: Relativity & --  & --  & -- & -- & -- &  -- & -- &  -- & 35.02 $\pm$ 2.35 \\
+F: Class Inference & --  & --  & -- &  -- &-- &  -- & -- &  -- &  92.52 $\pm$ 6.75 \\
+H: Adverb to Verb & --  & --  & -- &  -- &-- &  -- & -- &  -- &  92.52 $\pm$ 6.75 \\
 \bottomrule
 \end{tabularx}
 \end{center}
-\caption{The performance of an RNN decoder using our pre-trained text-environment embeddings vs. using randomly initialized embeddings.}
-\label{tab:baseline_results}
+\caption{The performance of our model and our RNN baseline on the gSCAN splits. We show the difference that results from using our pre-training scheme.}
+\label{tab:gscan_results}
 \end{table*}
+
+\begin{table*}
+	\begin{center}
+		\begin{tabularx}{\textwidth}{ l|ccccccccc }
+			\toprule
+			\multicolumn{1}{c}{} 
+			& \multicolumn{4}{c}{Transformer}  
+			& \multicolumn{4}{c}{RNN}  
+			& \\
+			\cmidrule{3-4}
+			\cmidrule{7-8}
+			\multicolumn{1}{c}{} 
+			& \multicolumn{2}{c}{w/ pre-training}  
+			& \multicolumn{2}{c}{random}
+			& \multicolumn{2}{c}{w/ pre-training}  
+			& \multicolumn{2}{c}{random}
+			& \multicolumn{1}{c}{\cite{ruis2020benchmark}}\\
+			& test  & val  & test &  val & test &  val & test & val & test  \\
+			\midrule
+			A: Random & --  & --  & -- &  -- & -- &  -- & -- &  -- & 97.69 $\pm$ 0.22\\
+			B: Yellow Squares & --  & --  & -- &  -- & -- &  -- & -- &  -- &  54.96 $\pm$ 39.39\\
+			C: Red Squares & --  & --  & -- &  -- & -- &  -- & -- &  -- & 23.51 $\pm$ 21.82\\
+			D: Novel Direction & --  & --  & -- & -- & -- &  -- & -- &  -- & 0.00 $\pm$ 0.00 \\
+			E: Relativity & --  & --  & -- & -- & -- &  -- & -- &  -- & 35.02 $\pm$ 2.35 \\
+			F: Class Inference & --  & --  & -- &  -- &-- &  -- & -- &  -- &  92.52 $\pm$ 6.75 \\
+			H: Adverb to Verb & --  & --  & -- &  -- &-- &  -- & -- &  -- &  92.52 $\pm$ 6.75 \\
+			\bottomrule
+		\end{tabularx}
+	\end{center}
+	\caption{The performance of our model and baseline RNN decoder on human annotated data.}
+	\label{tab:human_results}
+\end{table*}
+
+\begin{table*}
+	\begin{center}
+		\begin{tabularx}{\textwidth}{ l|cccccccc}
+			\toprule
+			\multicolumn{1}{c}{} 
+			& \multicolumn{2}{c|}{BERT}  
+			& \multicolumn{2}{c|}{-vis. pre-train}  
+			& \multicolumn{2}{c|}{-mult. frame pre-train}  
+			& \multicolumn{2}{c|}{-vis. train} \\
+			& test  & val  & test &  val & test &  val & test & val \\
+			\midrule
+			A: Random & --  & --  & -- &  -- & -- &  -- & -- &  -- \\
+			B: Yellow Squares & --  & --  & -- &  -- & -- &  -- & -- &  -- \\
+			C: Red Squares & --  & --  & -- &  -- & -- &  -- & -- &  -- \\
+			D: Novel Direction & --  & --  & -- & -- & -- &  -- & -- &  --  \\
+			E: Relativity & --  & --  & -- & -- & -- &  -- & -- &  --  \\
+			F: Class Inference & --  & --  & -- &  -- &-- &  -- & -- &  --  \\
+			H: Adverb to Verb & --  & --  & -- &  -- &-- &  -- & -- &  -- \\
+			\bottomrule
+		\end{tabularx}
+	\end{center}
+	\caption{Various ablations of our model. In the first column, we use the pre-trained BERT weights only for our embedding. For the second, we do not feed any visual input to the model during pre-training. For the third, we only give the initial environment state to the model during pre-training. For the fourth, we do not give the model visual input during training.}
+	\label{tab:ablations}
+\end{table*}
+
 
 \subsection{Results}
 
