@@ -67,13 +67,19 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-Humans can understand a novel phrase by breaking it down into previously known constituent pieces. 
+Young children who have mastered the compositionality of natural language are able to understand unfamiliar combinations of familiar words. 
 %
-We are interested in building artificial systems with the same ability.
+In contrast, modern neural networks have been shown to struggle on tasks that require an ability to systematically generalize; so they fail when the train and test data contain the same set of words in the same semantic contexts, but certain classes of word combinations are held out from the training data.
 %
-We present an approach for a language conditioned planner that leverages recent advances in pre-trained language models.
+These limitations are highlighted by a new challenge data-set \cite{ruis2020benchmark}, which tests for systematic generalization in a grounded setting by pairing natural language instructions  with executions in an environment. 
 %
-We propose a method for creating grounded vision-and-text embeddings, and we show how these embeddings better allow a planner to generalize on novel commands.
+In this work, inspired by recent advances in language model pre-training \cite{devlin-etal-2019-bert} and multi-modal representations learning, we propose a new method for learning embeddings of the input natural language and environment together.
+%
+In our approach, the model learns generic grounded vision-and-text embeddings by pre-training on two tasks: (1) Grounded Masked Language Modeling (GMLM), in which the model uses  the visual input to infer masked words and (2) Language and Vision Inference (LVI), in which the model classifies whether a language instruction environment is relevant or not to a given environment.
+%
+These tasks require the resulting embeddings to capture information about the semantics of the instruction as they pertain to a particular visual environment.
+%
+Transformer-based sequence embeddings have been shown to capture complex dependencies between the words in a sentence, and we hypothesize that this strength will allow our approach to out-perform the RNN baseline presented in \cite{ruis2020benchmark}.
 \end{abstract}
 
 \section{Introduction}
